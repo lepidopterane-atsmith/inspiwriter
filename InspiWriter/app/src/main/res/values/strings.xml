@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">InspiWriter</string>
+    <string name="action_settings">Settings</string>
+    <string name="button_label">Prompt Me!</string>
+</resources>
