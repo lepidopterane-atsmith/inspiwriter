@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
                     DataWrangler foo = ds.getValue(DataWrangler.class);
                     System.out.println(foo);
                     prompts.add(foo);
+                    System.out.println("prompts contains "+prompts.size()+" items");
                 }
             }
 
@@ -52,7 +53,9 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 System.out.println("but with a strong female protag");
-                TextView promptView = ()
+                TextView promptView = (TextView) findViewById(R.id.textView);
+                int randex = (int) (Math.random()*(prompts.size()));
+                promptView.setText(prompts.get(randex).toString());
             }
         });
     }
