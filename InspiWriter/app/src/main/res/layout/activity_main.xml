@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="38dp"
         android:text="@string/show_prompt" />
 
     <Button
@@ -45,4 +45,13 @@
         android:layout_marginBottom="38dp"
         android:onClick="showDraft"
         android:text="SHOW" />
+
+    <TextView
+        android:id="@+id/draft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/promptView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="29dp"
+        android:text="@string/boxed_draft" />
 </RelativeLayout>

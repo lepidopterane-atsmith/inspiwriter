@@ -33,16 +33,16 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    String dataRef = "topics";
+    String dataRef = "self-discovery";
     DatabaseReference myRef = database.getReference(dataRef);
     ArrayList<DataWrangler> prompts = new ArrayList<DataWrangler>();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        TextView text = findViewById(R.id.textView);
 
         System.out.println(myRef.getKey() + " print pls");
 
@@ -68,29 +68,41 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //System.out.println("but with a strong female protag");
-                refreshDirectory("messages", prompts);
-                TextView promptView = (TextView) findViewById(R.id.textView);
+                // refreshDirectory("anxiety-depression");
+
+                TextView draft = findViewById(R.id.draft);
+
+                draft.setText("");
+
                 int randex = (int) (Math.random()*(prompts.size()));
-                promptView.setText(prompts.get(randex).toString());
+                //System.out.println("!!!!!!!!"+prompts.get(randex));
+
+                TextView text = findViewById(R.id.promptView);
+                text.setText(prompts.get(randex).toString());
+            }
+        });
+
+        findViewById(R.id.button3).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                showDraft(v);
             }
         });
     }
 
     /** Called when the user taps the Show button */
     public void showDraft(View view) {
-        Intent intent = new Intent(this, DisplayMessageActivity.class);
-        EditText editText = (EditText) findViewById(R.id.editText);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
+        TextView draft = findViewById(R.id.draft);
+        EditText edit = findViewById(R.id.editText);
+
+        draft.setText(edit.getText());
     }
 
     private void refreshDirectory(String s, final ArrayList<DataWrangler> prompts){
 
-        myRef = database.getReference(s);
+        DatabaseReference myRef2 = database.getReference(s);
         prompts.clear();
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef2.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 

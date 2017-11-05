@@ -6,6 +6,7 @@
     <string name="channel_description">Pick a prompt today!</string>
     <string name="channel_name">Home</string>
     <string name="write_draft">Start your journal here!</string>
-    <string name="show_prompt">Your prompt</string>
+    <string name="show_prompt">press Prompt Me!</string>
     <string name="finished_draft">Your writing</string>
+    <string name="boxed_draft">  </string>
 </resources>
