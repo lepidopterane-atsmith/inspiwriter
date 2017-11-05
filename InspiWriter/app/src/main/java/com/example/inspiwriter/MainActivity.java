@@ -20,7 +20,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("messages");
+    String dataRef = "topics";
+    DatabaseReference myRef = database.getReference(dataRef);
+    ArrayList<DataWrangler> prompts = new ArrayList<DataWrangler>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TextView text = findViewById(R.id.textView);
-        final ArrayList<DataWrangler> prompts = new ArrayList<DataWrangler>();
 
         System.out.println(myRef.getKey() + " print pls");
 
@@ -52,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                System.out.println("but with a strong female protag");
+                //System.out.println("but with a strong female protag");
+                refreshDirectory("messages", prompts);
                 TextView promptView = (TextView) findViewById(R.id.textView);
                 int randex = (int) (Math.random()*(prompts.size()));
                 promptView.setText(prompts.get(randex).toString());
@@ -60,9 +62,35 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void refreshDirectory(String s, final ArrayList<DataWrangler> prompts){
+
+        myRef = database.getReference(s);
+        prompts.clear();
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot ds : dataSnapshot.getChildren()){
+                    DataWrangler foo = ds.getValue(DataWrangler.class);
+                    System.out.println(foo);
+                    prompts.add(foo);
+                    System.out.println("prompts contains "+prompts.size()+" items");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println(databaseError);
+            }
+        });
+
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate the menu; this adds items to the action bar if it is present
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
