@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -30,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("messages");
 
@@ -37,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        TextView text = findViewById(R.id.textView);
         final ArrayList<DataWrangler> prompts = new ArrayList<DataWrangler>();
 
         System.out.println(myRef.getKey() + " print pls");
@@ -64,11 +64,20 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 System.out.println("but with a strong female protag");
-                TextView promptView = findViewById(R.id.textView);
+                TextView promptView = findViewById(R.id.promptView);
                 int randex = (int) (Math.random() * (prompts.size()));
                 promptView.setText(prompts.get(randex).toString());
             }
         });
+    }
+
+    /** Called when the user taps the Show button */
+    public void showDraft(View view) {
+        Intent intent = new Intent(this, DisplayMessageActivity.class);
+        EditText editText = (EditText) findViewById(R.id.editText);
+        String message = editText.getText().toString();
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
     }
 
     @Override
@@ -94,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Notification button and sending notification (you can comment out this thing if you want)
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    /**@RequiresApi(api = Build.VERSION_CODES.O)
     public void sendNotification(View view) {
         //Get an instance of NotificationManager//
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -110,5 +119,8 @@ public class MainActivity extends AppCompatActivity {
                         .setContentText("Hello World!")
                         .setChannelId(id);
         mNotificationManager.notify(001, mBuilder.build());
-    }
+    }*/
+
+    /** The function to show the prompt of the writer */
+
 }

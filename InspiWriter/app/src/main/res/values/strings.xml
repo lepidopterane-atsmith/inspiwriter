@@ -5,4 +5,7 @@
     <string name="button_label2">Do it!</string>
     <string name="channel_description">Pick a prompt today!</string>
     <string name="channel_name">Home</string>
+    <string name="write_draft">Start your journal here!</string>
+    <string name="show_prompt">Your prompt</string>
+    <string name="finished_draft">Your writing</string>
 </resources>
