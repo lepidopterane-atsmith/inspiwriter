@@ -9,4 +9,9 @@
     <string name="show_prompt">press Prompt Me!</string>
     <string name="finished_draft">Your writing</string>
     <string name="boxed_draft">  </string>
+    <string-array name="spin_arr">
+        <item>Anxiety and Depression</item>
+        <item>Self-Discovery</item>
+        <item>Writing</item>
+    </string-array>
 </resources>

@@ -19,7 +19,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -37,19 +40,19 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference myRef = database.getReference(dataRef);
     ArrayList<DataWrangler> prompts = new ArrayList<DataWrangler>();
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         System.out.println(myRef.getKey() + " print pls");
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                prompts.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     DataWrangler foo = ds.getValue(DataWrangler.class);
                     System.out.println(foo);
@@ -64,14 +67,35 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.spin_arr,
+                android.R.layout.simple_spinner_item);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                dataRef = parent.getItemAtPosition(position).toString().toLowerCase().replace(" ","-");
+                updatePrompts(dataRef);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //
+            }
+        });
+
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 //System.out.println("but with a strong female protag");
                 // refreshDirectory("anxiety-depression");
 
-                TextView draft = findViewById(R.id.draft);
+                System.out.println(dataRef + " NEW DATABASE REFERENCE, <-----");
 
+                TextView draft = findViewById(R.id.draft);
                 draft.setText("");
 
                 int randex = (int) (Math.random()*(prompts.size()));
@@ -143,6 +167,32 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void updatePrompts(String topics) {
+        System.out.println(myRef.getKey() + " print pls");
+
+        myRef = database.getReference(topics);
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                prompts.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    DataWrangler foo = ds.getValue(DataWrangler.class);
+                    System.out.println(foo);
+                    prompts.add(foo);
+                    System.out.println("prompts contains " + prompts.size() + " items");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println(databaseError);
+            }
+        });
+    }
+
+
 
     // Notification button and sending notification (you can comment out this thing if you want)
     /**@RequiresApi(api = Build.VERSION_CODES.O)
